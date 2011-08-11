@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+Désolé, vous n'avez pas assez de crédit pour ce service !
+
+<ul>
+  <li><a href="{% url member-credit-buy %}">Recharger votre carte</a></li>
+  <li><a href="{% url userena_profile_detail request.user %}">Retourner à votre profil</a></li>
+</ul>
+
+{% endblock %}

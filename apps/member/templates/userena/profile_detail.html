@@ -1,0 +1,47 @@
+{% extends 'userena/base_userena.html' %}
+{% load i18n %}
+{% load qr_tags %}
+
+{% block title %}{% blocktrans with profile.user.username as username %}{{ username }}'s profile.{% endblocktrans %}{% endblock %}
+{% block content_title %}<h2>{{ profile.user.username }} {% if profile.user.get_full_name %}({{ profile.user.get_full_name }}){% endif %}</h2>{% endblock %}
+
+{% block content %}
+
+<div id="membership_card">
+  <form>
+    
+    <div id="picture"><img src="{{ profile.get_mugshot_url }}" alt="{% trans "Your mugshot" %}" /><!-- <img src="{% qr_code profile.membership_card.uuid 120 %}">--></div>
+    
+    <h1 class="nom">{{ profile.user.last_name }}</h1>
+    <input type="text" class="nom hidden" value="" />
+    <h1 class="prenom">{{ profile.user.first_name }}</h1>
+    <input type="text" class="prenom hidden" value="" />
+    <h1 class="mail">{{ profile.user.email }}</h1>
+    <input type="text" class="mail hidden" value="" />
+    <h1 class="validite hidden">12 Juillet 2011 au 12 juillet 2012 </h1>
+    <input type="text" class="validite" value="" />
+    
+  </form>
+</div>
+
+<div class="white-box">
+  {% comment %}Dirty hack. Will use django-guardian in the future.{% endcomment %}
+  {% if user.username == profile.user.username %}
+  <ul id="box-nav">
+    <li><a href="{% url userena_profile_edit user.username %}">{% trans "Edit details" %} &raquo;</a></li>
+    <li><a href="{% url userena_password_change user.username %}">{% trans "Change password" %} &raquo;</a></li>
+    <li><a href="{% url userena_email_change user.username %}">{% trans "Change email" %} &raquo;</a></li>
+    <li><a href="{% url userena_signout %}">Se déconnecter</a> &raquo;</li>
+  </ul>
+  {% endif %}
+
+
+<h2>Services (Coworking, Bouffe, ...)</h2>
+
+<i>Vous avez {{ profile.membership_card.remaining_units }} &euro; de crédit sur votre carte (<a href="{% url member-credit-buy %}">Recharger</a>).</i>
+
+<ul>
+  <li><a href="{% url member-service-list %}">Accès aux services</a></li>
+</ul>
+
+{% endblock %}

@@ -1,0 +1,12 @@
+<html>
+  <head>
+    {% block css %}
+    {% endblock %}
+  </head>
+
+  <body>
+    <h1>{{ request.user.get_full_name }}</h1>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>

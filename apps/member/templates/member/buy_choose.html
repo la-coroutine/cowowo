@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+Recharger de :
+<ul>
+  <li><a href="{% url member-credit-buy %}?amount=10">10 €</a></li>
+  <li><a href="{% url member-credit-buy %}?amount=20">20 €</a></li>
+  <li><a href="{% url member-credit-buy %}?amount=30">30 €</a></li>
+  <li><a href="{% url member-credit-buy %}?amount=50">50 €</a></li>
+</ul>
+
+{% endblock %}
