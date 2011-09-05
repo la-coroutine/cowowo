@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 
     url(r'^member/', include('userena.urls')),
     url(r'^member/', include('apps.member.urls')),
+    url(r'^coworking/', include('apps.coworking.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
 )

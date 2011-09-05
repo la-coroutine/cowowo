@@ -4,13 +4,15 @@
 
 <h2>Acheter un service</h2>
 
-<form method='POST' action='{% url member-service-buy %}'>
+<form method='POST' action='{% url coworking-service-buy %}'>
   {% csrf_token %}
   {{ service_cons_form }}
   <input type='submit' value='Valider'>
 </form>
 
-<i>Vous avez {{ request.user.get_profile.membership_card.remaining_units }}€ de crédit (<a href="{% url member-credit-buy %}">Recharger</a>).</i>
+<i>Vous avez {{ request.user.get_profile.membership_card.credit }}€ de crédit (<a href="{% url coworking-credit-buy %}">Recharger</a>).</i>
+
+<i><a href="{% url coworking-pack-buy %}">Prendre un pack</a></i>
 
 
 <h2>Historique</h2>

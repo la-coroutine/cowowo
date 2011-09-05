@@ -10,6 +10,8 @@ from django_extensions.db.fields import UUIDField
 from userena.models import UserenaLanguageBaseProfile
 from userena.models import PROFILE_PERMISSIONS
 
+from apps.coworking.models import Service, ServiceConsumption
+
 class CoroutineProfile(UserenaLanguageBaseProfile):
     """
     Userena Profile with language switch
@@ -39,52 +41,32 @@ class CoroutineProfile(UserenaLanguageBaseProfile):
         return ('userena_profile_detail', (), {'username': self.user.username})
 
 
+class ServiceUnits(models.Model):
+    """
+    Available Units for a given service
+    """
+    card = models.ForeignKey('member.MembershipCard', related_name='remaining_units')
+    service = models.ForeignKey(Service, related_name='user_units')
+    amount = models.PositiveIntegerField(default=0)
+
+    def __unicode__(self):
+        return "%s - %s" % (self.service.label, self.amount)
+
 class MembershipCard(models.Model):
     uuid = UUIDField(unique=True, db_index=True, auto=True, editable=True)
 
     user = models.OneToOneField(CoroutineProfile, related_name='membership_card')
 
-    remaining_units = models.PositiveIntegerField(default=0)
+    credit = models.PositiveIntegerField(default=0)
+    units = models.ManyToManyField(Service, through=ServiceUnits)
 
-    consumptions = models.ManyToManyField('Service', through='ServiceConsumption')
+    consumptions = models.ManyToManyField(Service, through=ServiceConsumption,
+                                          related_name='membership_card')
     
     # Expiration
 
     def __unicode__(self):
         return u"Membership card of %s" % self.user.user
-
-
-### Transactions
-class Transaction(models.Model):
-    TRANSACTION_KINDS = (
-        ('CREDIT', 'Crédit'),
-        ('DEBIT', 'Débit')
-        )
-
-    amount = models.PositiveIntegerField()
-    date = models.DateTimeField(auto_now_add=True)
-    label = models.CharField(max_length=200, null=True, blank=True)
-    kind = models.CharField(max_length=6, choices=TRANSACTION_KINDS)
-    card = models.ForeignKey(MembershipCard, related_name='transactions')
-
-### Services
-class Service(models.Model):
-    """
-    An available service
-    """
-    label = models.CharField(max_length=200)
-    cost = models.PositiveIntegerField()
-
-    def __unicode__(self):
-        return u"%s (%s €)" % (self.label, self.cost)
-
-class ServiceConsumption(models.Model):
-    """
-    When a member buys a service
-    """
-    card = models.ForeignKey(MembershipCard, related_name='services')
-    transaction = models.OneToOneField(Transaction)    
-    service = models.ForeignKey(Service, related_name='consumptoins')
 
 
 

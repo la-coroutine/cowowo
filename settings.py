@@ -133,9 +133,10 @@ INSTALLED_APPS = (
     'userena',
 
     'apps.member',
+    'apps.coworking',
 
     'piston',
-    'qr_codes'
+    'qr_codes',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

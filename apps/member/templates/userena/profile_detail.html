@@ -38,10 +38,18 @@
 
 <h2>Services (Coworking, Bouffe, ...)</h2>
 
-<i>Vous avez {{ profile.membership_card.remaining_units }} &euro; de crédit sur votre carte (<a href="{% url member-credit-buy %}">Recharger</a>).</i>
+<i>Vous avez {{ profile.membership_card.credit }} &euro; de crédit sur votre carte (<a href="{% url coworking-credit-buy %}">Recharger</a>).</i>
 
 <ul>
-  <li><a href="{% url member-service-list %}">Accès aux services</a></li>
+{% for service_units in user.get_profile.membership_card.remaining_units.all %}
+<li>{{ service_units }}</li>
+{% endfor %}
+</ul>
+
+<i><a href="{% url coworking-pack-buy %}">Prendre un pack</a></i>
+
+<ul>
+  <li><a href="{% url coworking-service-list %}">Accès aux services</a></li>
 </ul>
 
 {% endblock %}

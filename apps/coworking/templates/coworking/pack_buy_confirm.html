@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+Vous allez achter un pack {{ pack.label }} pour {{ pack.cost }} €.
+<form method="POST" action="?">
+  {% csrf_token %}
+  {{ transaction_form.as_p }}
+
+  <input type='submit' value='Valider'>
+</form>
+
+<a href="{% url userena_profile_detail request.user %}">Annuler et
+retouner à votre profil</a>
+
+{% endblock %}
